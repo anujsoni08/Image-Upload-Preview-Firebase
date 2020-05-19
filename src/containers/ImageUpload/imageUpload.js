@@ -21,14 +21,12 @@ class ImageUploadContainer extends Component {
   handlePreview = (index) => {
     const modalState = [...this.state.modalState];
     modalState[index] = true;
-    console.log(modalState);
     this.setState({ modalState });
   };
 
   handleModalClose = (index) => {
     const modalState = [...this.state.modalState];
     modalState[index] = false;
-    console.log(modalState);
     this.setState({ modalState });
   };
 
@@ -73,7 +71,6 @@ class ImageUploadContainer extends Component {
       url,
       name: imageName.split(".").join(`_${index}.`),
     };
-    console.log(urlList, index);
     this.setState({ convertedImagesUrlList: urlList });
   };
 
@@ -85,12 +82,9 @@ class ImageUploadContainer extends Component {
   handleFireBaseUpload = (e) => {
     e.preventDefault();
     const { convertedImagesUrlList } = this.state;
-    console.log("start of upload");
     const promises = [];
     convertedImagesUrlList.forEach(async (file) => {
-      console.log(file);
       const src = await this.blobFromURL(file.url);
-      console.log(src);
       const uploadTask = storage.ref(`/images/${file.name}`).put(src);
       promises.push(uploadTask);
       //initiates the firebase side uploading
@@ -98,7 +92,6 @@ class ImageUploadContainer extends Component {
         "state_changed",
         (snapShot) => {
           //takes a snap shot of the process as it is happening
-          console.log(snapShot);
         },
         (err) => {
           //catches the errors
@@ -127,7 +120,6 @@ class ImageUploadContainer extends Component {
     const { src, modalState, imageName, convertedImagesUrlList } = this.state;
 
     const isUploadDisabled = () => {
-      console.log(convertedImagesUrlList.some((file) => !file.url.length));
       return convertedImagesUrlList.some((file) => !file.url.length);
     };
 
