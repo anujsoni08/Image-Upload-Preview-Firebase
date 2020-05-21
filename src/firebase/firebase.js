@@ -1,7 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/storage";
 import "firebase/auth";
-import "firebase/analytics";
+// import "firebase/analytics";
 import "firebase/database";
 
 
@@ -24,7 +24,7 @@ const storage = firebase.storage();
 
 const db = firebase.database();
 
-firebase.analytics();
+// firebase.analytics();
 
 firebase.auth();
 

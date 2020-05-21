@@ -1,58 +1,39 @@
 import React, { useState, useRef, useCallback } from "react";
-import { createCanvas, loadImage } from "canvas";
 import Dialog from "@material-ui/core/Dialog";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Button from "@material-ui/core/Button";
+import PropTypes from "prop-types";
 import ReactCrop from "react-image-crop";
+import { connect } from "react-redux";
 import "react-image-crop/dist/ReactCrop.css";
 
-const useStyles = makeStyles({
-  modalBody: {
-    background: "#ffffff",
-    paddingBottom: "2%",
-    padding: "2em",
-    maxWidth: "600px",
-    display: "flex",
-    maxHeight: "calc(100% - 64px)",
-    flexDirection: "column",
-    width: "100%",
-    transform: "translate(-50%, -50%)",
-    top: "50%",
-    left: "50%",
-    position: "relative",
-    "&:active": {
-      outline: "none",
-    },
-    "&:focus": {
-      outline: "none",
-    },
-  },
-});
-
-const ImagesPreview = (props) => {
+const ImageCropper = (props) => {
   const {
-    modalState,
     src,
     modalCloseHandler,
     dimensions,
     croppedUrlHandler,
     imageIndex,
     imageName,
+    modalState,
   } = props;
   const { height, width } = dimensions;
   const imageRef = useRef(null);
   const [crop, setCrop] = useState({ unit: "px", width, height });
   const [previewUrl, setPreviewUrl] = useState();
+  const [croppedImageDimensions, setCroppedImageDimensions] = useState({
+    height: null,
+    width: null,
+  });
 
   // If you setState the crop in here you should return false.
   const onImageLoaded = useCallback((img) => {
     imageRef.current = img;
   }, []);
 
-  const onCropChange = (crop, percentCrop) => {
-    // You could also use percentCrop:
-    // this.setState({ crop: percentCrop });
-    setCrop({ ...crop });
+  const getDimensions = ({ target: image }) => {
+    setCroppedImageDimensions({
+      height: image.naturalHeight,
+      width: image.naturalWidth,
+    });
   };
 
   const makeClientCrop = async (crop) => {
@@ -98,6 +79,7 @@ const ImagesPreview = (props) => {
         }
         blob.name = fileName;
         window.URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(window.URL.createObjectURL(blob));
         croppedUrlHandler(window.URL.createObjectURL(blob));
       }, "image/jpeg");
     });
@@ -105,15 +87,20 @@ const ImagesPreview = (props) => {
 
   return (
     <Dialog maxWidth={"lg"} onClose={handleModalClose} open={modalState}>
-      {/* <Carousel views={imagesUrlList} /> */}
       <div className="modal-header">
-        <h5 className="modal-title">Modal title</h5>
+        <h5 className="modal-title">Crop Image</h5>
         <button type="button" className="close" onClick={handleModalClose}>
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div className="modal-body">
-        {/* <img src={imageSourceUrl} /> */}
+        {previewUrl && (
+          <p>
+            Cropped Image height :{" "}
+            <strong>{croppedImageDimensions.height}px</strong> width :
+            <strong>{croppedImageDimensions.width}px</strong>
+          </p>
+        )}
         {src && (
           <ReactCrop
             src={src}
@@ -124,17 +111,50 @@ const ImagesPreview = (props) => {
           />
         )}
         {previewUrl && (
-          <img alt="Crop" style={{ maxWidth: "100%" }} src={previewUrl} />
+          <img
+            alt="Crop"
+            onLoad={getDimensions}
+            style={{ maxWidth: "100%" }}
+            src={previewUrl}
+          />
         )}
       </div>
       <div className="modal-footer">
-        <Button onClick={handleModalClose} color="primary">
+        <button onClick={handleModalClose} className="btn btn-primary">
           Close
-        </Button>
-        <Button onClick={handleCroppedImageSave}>Save Photo</Button>
+        </button>
+        <button
+          onClick={handleCroppedImageSave}
+          className="btn btn-outline-primary"
+        >
+          Save Photo
+        </button>
       </div>
     </Dialog>
   );
 };
 
-export default ImagesPreview;
+const mapStateToProps = (state) => {
+  return {
+    src: state.imageSource,
+  };
+};
+
+export default connect(mapStateToProps)(React.memo(ImageCropper));
+
+ImageCropper.protoTypes = {
+  src : PropTypes.any,
+  modalCloseHandler : PropTypes.func,
+  dimensions : PropTypes.shape({
+    height: PropTypes.number,
+    width: PropTypes.number
+  }),
+  croppedUrlHandler : PropTypes.func,
+  imageIndex : PropTypes.number,
+  imageName : PropTypes.string,
+  modalState : PropTypes.shape({
+    state: PropTypes.bool,
+    message: PropTypes.string,
+    mode: PropTypes.string
+  }),
+};

@@ -1,19 +1,22 @@
-import React from 'react';
-import ImageUploadContainer from './containers/ImageUpload/imageUpload';
-import Navigation from './components/NavigationComponent/navigation';
-import ImageListingComponent from './components/ImageListingComponent/ImageListing';
-import { Switch, Route } from 'react-router-dom';
+import React, { Suspense } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+
+const HomePage = React.lazy(() =>
+  import("./components/HomePage/HomePage")
+);
+const FirebaseImagesPreview = React.lazy(() =>
+  import("./components/FirebaseImagesPreview/FirebaseImagesPreview")
+);
 
 function App() {
   return (
-    <div>
-      <Navigation />
-      {/* <ImageUploadContainer /> */}
+    <Suspense fallback={<div>Loading...</div>}>
       <Switch>
-        <Route exact path="/" component={ImageUploadContainer} />
-        <Route path="/list" component={ImageListingComponent} />
+        <Route exact path="/" component={HomePage} />
+        <Route path="/list" component={FirebaseImagesPreview} />
+        <Redirect to="/" />
       </Switch>
-    </div>
+    </Suspense>
   );
 }
 
