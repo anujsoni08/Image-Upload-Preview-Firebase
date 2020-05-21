@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import { storage } from "../../firebase/firebase";
-import * as actions from "../../store/action";
+// import { storage } from "../../config/firebase";
+import * as actions from "../../../store/action";
+import firebaseservice from "../../../services/firebaseService";
 
 const UploadFirebaseAndPreviewButton = (props) => {
   const {
@@ -26,64 +27,33 @@ const UploadFirebaseAndPreviewButton = (props) => {
     return !firebaseUrlList.some((url) => url.source === null);
   };
 
-  const handleFireBaseUpload = (e) => {
-    const isAllImagesPreviewed = isAllImagesUrlNotNull();
-    if (isAllImagesPreviewed) {
-      e.preventDefault();
-      const promises = [];
-      convertedImagesDataUrlList.forEach(async (file) => {
-        const src = await blobFromURL(file.url);
-        const uploadTask = storage.ref(`/images/${file.name}`).put(src);
-        promises.push(uploadTask);
-        //initiates the firebase side uploading
-        uploadTask.on(
-          "state_changed",
-          (snapShot) => {
-            //takes a snap shot of the process as it is happening
-          },
-          (err) => {
-            //catches the errors
-            console.log(err);
-          },
-          () => {
-            // gets the functions from storage refences the image storage in firebase by the children
-            // gets the download url then sets the image from firebase as the value for the imgUrl key:
-            storage
-              .ref("images")
-              .child(file.name)
-              .getDownloadURL()
-              .then((fireBaseUrl) => {
-                const firebaseImagesUrlListArray = [
-                  ...firebaseUrlList,
-                  {
-                    source: fireBaseUrl,
-                  },
-                ];
-
-                // setFirebaseUploadedList(firebaseImagesUrlListArray);
-                setFirebaseImagesUrlList(firebaseImagesUrlListArray);
-              });
+  const handleFireBaseUpload = async (e) => {
+    convertedImagesDataUrlList.forEach(async (file) => {
+      const src = await blobFromURL(file.url);
+      await firebaseservice
+        .uploadFile(file.name, src)
+        .then((res) => {
+          if (res.success) {
+            console.log(res);
+            setFirebaseImagesUrlList([
+              ...firebaseUrlList,
+              {
+                source: res.url,
+              },
+            ]);
           }
-        );
-      });
-
-      Promise.all(promises)
-        .then(() => {
-          setSnackbarState({
-            state: true,
-            message: "All files uploaded",
-            mode: "success",
-          });
-          setFirebaseUploadStatus(true);
         })
-        .catch((err) => console.log(err.code));
-    } else {
-      setSnackbarState({
-        state: true,
-        message: "Preview all images",
-        mode: "info",
-      });
-    }
+        .catch((e) => {
+          console.log(e);
+        });
+    });
+
+    setSnackbarState({
+      state: true,
+      message: "All files uploaded",
+      mode: "success",
+    });
+    setFirebaseUploadStatus(true);
   };
 
   const renderUploadFirebaseAndPreviewButton = () => {
@@ -138,7 +108,7 @@ export default connect(
 
 UploadFirebaseAndPreviewButton.propTypes = {
   firebaseUploadStatus: PropTypes.bool,
-  firebaseUrlList : PropTypes.array ,
+  firebaseUrlList: PropTypes.array,
   setSnackbarState: PropTypes.func,
   setFirebaseImagesUrlList: PropTypes.func,
   setFirebaseUploadStatus: PropTypes.func,

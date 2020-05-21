@@ -1,12 +1,12 @@
 import React from "react";
-import PropTypes, {  exact } from "prop-types";
+import PropTypes from "prop-types";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import styled from "@material-ui/core/styles/styled";
 
 import { connect } from "react-redux";
 
-import * as actions from "../store/action";
+import * as actions from "../../../store/action";
 
 const Message = styled("span")({
   display: "flex",
@@ -60,7 +60,7 @@ export default connect(
 )(React.memo(SimpleSnackbar));
 
 SimpleSnackbar.propTypes = {
-  snackbarObj: exact({
+  snackbarObj: PropTypes.exact({
     state: PropTypes.bool,
     mode: PropTypes.string,
     message: PropTypes.string,

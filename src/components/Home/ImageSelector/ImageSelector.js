@@ -2,7 +2,7 @@ import React, { useState, useRef, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import * as actions from "../../store/action";
+import * as actions from "../../../store/action";
 
 const ImageRemovePreview = React.lazy(() =>
   import("../ImageRemovePreview/ImageRemovePreview")

@@ -2,9 +2,9 @@ import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import * as actions from "../../store/action";
+import * as actions from "../../../store/action";
 
-import { IMAGE_SIZE_CONST } from "../../utils/constant";
+import { IMAGE_SIZE_CONST } from "../../../utils/constant";
 import ImageCropper from "../ImageCropper/ImageCropper";
 
 const ImagesCroppedPreviewButton = (props) => {

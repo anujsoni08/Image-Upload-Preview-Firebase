@@ -8,8 +8,9 @@ import { Link } from "react-router-dom";
 
 const FirebaseImagesPreview = (props) => {
   const [modalState, setModalState] = useState(false);
-
   const { firebaseUrlList, resetState } = props;
+
+  console.log(props)
 
   const toggleModal = () => {
     setModalState(!modalState);
