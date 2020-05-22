@@ -10,7 +10,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route path="/list" component={Preview} />
-        <Redirect to="/" />
+        <Route render={() => <Redirect to={{pathname: "/"}} />} />
       </Switch>
     </Suspense>
   );
