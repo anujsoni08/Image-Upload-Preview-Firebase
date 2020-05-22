@@ -2,10 +2,9 @@ import React, { Fragment, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
-import * as actions from "../../../store/action";
-
 import { IMAGE_SIZE_CONST } from "../../../utils/constant";
 import ImageCropper from "../ImageCropper/ImageCropper";
+import * as actions from "../../../store/action";
 
 const ImagesCroppedPreviewButton = (props) => {
   const [modalState, setModalState] = useState(Array(4).fill(false));

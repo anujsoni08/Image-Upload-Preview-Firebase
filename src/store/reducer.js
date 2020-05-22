@@ -5,7 +5,7 @@ const initialState = {
   firebaseUrlList: [],
   snackbar: {
     state: false,
-    mode: "",
+    mode: "error",
     message: "",
   },
   imageSource: null,

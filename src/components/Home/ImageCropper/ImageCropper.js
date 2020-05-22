@@ -24,7 +24,6 @@ const ImageCropper = (props) => {
     width: null,
   });
 
-  // If you setState the crop in here you should return false.
   const onImageLoaded = useCallback((img) => {
     imageRef.current = img;
   }, []);
@@ -143,18 +142,18 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps)(React.memo(ImageCropper));
 
 ImageCropper.protoTypes = {
-  src : PropTypes.any,
-  modalCloseHandler : PropTypes.func,
-  dimensions : PropTypes.shape({
+  src: PropTypes.any,
+  modalCloseHandler: PropTypes.func,
+  dimensions: PropTypes.shape({
     height: PropTypes.number,
-    width: PropTypes.number
+    width: PropTypes.number,
   }),
-  croppedUrlHandler : PropTypes.func,
-  imageIndex : PropTypes.number,
-  imageName : PropTypes.string,
-  modalState : PropTypes.shape({
+  croppedUrlHandler: PropTypes.func,
+  imageIndex: PropTypes.number,
+  imageName: PropTypes.string,
+  modalState: PropTypes.shape({
     state: PropTypes.bool,
     message: PropTypes.string,
-    mode: PropTypes.string
+    mode: PropTypes.string,
   }),
 };

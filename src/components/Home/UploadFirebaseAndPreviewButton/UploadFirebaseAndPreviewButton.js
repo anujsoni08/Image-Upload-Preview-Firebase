@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
-// import { storage } from "../../config/firebase";
 import * as actions from "../../../store/action";
 import firebaseservice from "../../../services/firebaseService";
 

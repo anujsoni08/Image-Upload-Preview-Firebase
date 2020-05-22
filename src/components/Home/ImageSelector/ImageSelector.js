@@ -14,17 +14,18 @@ const ImageSelector = (props) => {
     width: 0,
   });
 
-  const { src, setImageSource, setSnackbarState, setValidImageStatus } = props;
+  const {
+    src,
+    setImageSource,
+    setSnackbarState,
+    setValidImageStatus,
+    resetState,
+  } = props;
 
   let imageRef = useRef();
 
   const resetFile = () => {
-    setImageSource(null);
-    setValidImageStatus(false);
-    setDimensions({
-      height: 0,
-      width: 0,
-    });
+    resetState();
     imageRef.current.value = "";
   };
 
@@ -39,8 +40,8 @@ const ImageSelector = (props) => {
     }
   };
 
-  const onImgLoad = ({ target: img }) => {
-    if (img.naturalWidth !== 1024 || img.naturalHeight !== 1024) {
+  const onImgLoad = ({ target :image }) => {
+    if (image.naturalWidth !== 1024 || image.naturalHeight !== 1024) {
       setSnackbarState({
         state: true,
         message: "Image is not of 1024 * 1024 resolution.",
@@ -49,8 +50,8 @@ const ImageSelector = (props) => {
       setValidImageStatus(false);
     } else {
       setDimensions({
-        height: img.naturalHeight,
-        width: img.naturalWidth,
+        height: image.naturalHeight,
+        width: image.naturalWidth,
       });
       setValidImageStatus(true);
     }
@@ -104,6 +105,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.setValidImageStatus(isValid)),
     setSnackbarState: (snackbarObj) =>
       dispatch(actions.setSnackbarState(snackbarObj)),
+    resetState: () => dispatch(actions.resetState()),
   };
 };
 
@@ -117,4 +119,5 @@ ImageSelector.propTypes = {
   setImageSource: PropTypes.func,
   setSnackbarState: PropTypes.func,
   setValidImageStatus: PropTypes.func,
+  resetState: PropTypes.func,
 };
