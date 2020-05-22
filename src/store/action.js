@@ -54,7 +54,7 @@ export const setAllImagesPreviewedStatus = (value) => {
   };
 };
 
-export const updateConvertedImagesDataUrlList = (index, value) => {
+export const updateConvertedImagesBlobUrlList = (index, value) => {
   return {
     type: actionTypes.UPDATE_CONVERTED_IMAGES_DATA_URL_LIST,
     index,
@@ -62,7 +62,7 @@ export const updateConvertedImagesDataUrlList = (index, value) => {
   };
 };
 
-export const resetConvertedImagesDataUrlList = () => {
+export const resetConvertedImagesBlobUrlList = () => {
   return {
     type: actionTypes.RESET_CONVERTED_IMAGES_DATA_URL_LIST,
   };

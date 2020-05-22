@@ -12,8 +12,8 @@ const ImagesCroppedPreviewButton = (props) => {
 
   const {
     setAllImagesPreviewedStatus,
-    updateConvertedImagesDataUrlList,
-    convertedImagesDataUrlList,
+    updateConvertedImagesBlobUrlList,
+    convertedImagesBlobUrlList,
   } = props;
 
   const croppedUrlHandler = (index, url, imageName) => {
@@ -22,9 +22,9 @@ const ImagesCroppedPreviewButton = (props) => {
       name: imageName.split(".").join(`_${index}.`),
     };
 
-    updateConvertedImagesDataUrlList(index, urlObj);
+    updateConvertedImagesBlobUrlList(index, urlObj);
 
-    const allImagesPreviewedStatus = !convertedImagesDataUrlList.some(
+    const allImagesPreviewedStatus = !convertedImagesBlobUrlList.some(
       (image) => image.url === null
     );
     setAllImagesPreviewedStatus(allImagesPreviewedStatus);
@@ -81,7 +81,7 @@ const mapStateToProps = (state) => {
     firebaseUploadStatus: state.firebaseUploadStatus,
     firebaseUrlList: state.firebaseUrlList,
     allImagesPreviewedStatus: state.allImagesPreviewedStatus,
-    convertedImagesDataUrlList: state.convertedImagesDataUrlList,
+    convertedImagesBlobUrlList: state.convertedImagesBlobUrlList,
   };
 };
 
@@ -89,8 +89,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setAllImagesPreviewedStatus: (value) =>
       dispatch(actions.setAllImagesPreviewedStatus(value)),
-    updateConvertedImagesDataUrlList: (index, value) =>
-      dispatch(actions.updateConvertedImagesDataUrlList(index, value)),
+    updateConvertedImagesBlobUrlList: (index, value) =>
+      dispatch(actions.updateConvertedImagesBlobUrlList(index, value)),
   };
 };
 
@@ -101,6 +101,6 @@ export default connect(
 
 ImagesCroppedPreviewButton.propTypes = {
   setAllImagesPreviewedStatus: PropTypes.func,
-  updateConvertedImagesDataUrlList: PropTypes.func,
-  convertedImagesDataUrlList: PropTypes.array,
+  updateConvertedImagesBlobUrlList: PropTypes.func,
+  convertedImagesBlobUrlList: PropTypes.array,
 };

@@ -15,7 +15,7 @@ const UploadFirebaseAndPreviewButton = (props) => {
     setFirebaseImagesUrlList,
     setFirebaseUploadStatus,
     allImagesPreviewedStatus,
-    convertedImagesDataUrlList,
+    convertedImagesBlobUrlList,
   } = props;
 
   const blobFromURL = async (url) => {
@@ -23,18 +23,13 @@ const UploadFirebaseAndPreviewButton = (props) => {
     return blob;
   };
 
-  const isAllImagesUrlNotNull = () => {
-    return !firebaseUrlList.some((url) => url.source === null);
-  };
-
   const handleFireBaseUpload = async (e) => {
-    convertedImagesDataUrlList.forEach(async (file) => {
+    convertedImagesBlobUrlList.forEach(async (file) => {
       const src = await blobFromURL(file.url);
       await firebaseservice
         .uploadFile(file.name, src)
         .then((res) => {
           if (res.success) {
-            console.log(res);
             setFirebaseImagesUrlList([
               ...firebaseUrlList,
               {
@@ -86,7 +81,7 @@ const mapStateToProps = (state) => {
     firebaseUploadStatus: state.firebaseUploadStatus,
     firebaseUrlList: state.firebaseUrlList,
     allImagesPreviewedStatus: state.allImagesPreviewedStatus,
-    convertedImagesDataUrlList: state.convertedImagesDataUrlList,
+    convertedImagesBlobUrlList: state.convertedImagesBlobUrlList,
   };
 };
 
@@ -113,6 +108,6 @@ UploadFirebaseAndPreviewButton.propTypes = {
   setFirebaseImagesUrlList: PropTypes.func,
   setFirebaseUploadStatus: PropTypes.func,
   allImagesPreviewedStatus: PropTypes.bool,
-  convertedImagesDataUrlList: PropTypes.array,
+  convertedImagesBlobUrlList: PropTypes.array,
   resetSnackbarState: PropTypes.func,
 };

@@ -12,7 +12,7 @@ const initialState = {
   validImageStatus: false,
   firebaseUploadStatus: false,
   allImagesPreviewedStatus: false,
-  convertedImagesDataUrlList: Array(4).fill({ url: null, name: "" }),
+  convertedImagesBlobUrlList: Array(4).fill({ url: null, name: "" }),
 };
 
 const reducer = (state = initialState, action) => {
@@ -47,17 +47,17 @@ const reducer = (state = initialState, action) => {
         allImagesPreviewedStatus: action.value,
       });
     case actionTypes.UPDATE_CONVERTED_IMAGES_DATA_URL_LIST:
-      const newConvertedImagesDataUrlList = [
-        ...state.convertedImagesDataUrlList,
+      const newConvertedImagesBlobUrlList = [
+        ...state.convertedImagesBlobUrlList,
       ];
-      newConvertedImagesDataUrlList[action.index] = action.value;
+      newConvertedImagesBlobUrlList[action.index] = action.value;
       return updateObject({
         ...state,
-        convertedImagesDataUrlList: newConvertedImagesDataUrlList,
+        convertedImagesBlobUrlList: newConvertedImagesBlobUrlList,
       });
     case actionTypes.RESET_CONVERTED_IMAGES_DATA_URL_LIST:
       return updateObject(state, {
-        convertedImagesDataUrlList: initialState.convertedImagesDataUrlList,
+        convertedImagesBlobUrlList: initialState.convertedImagesBlobUrlList,
       });
     case actionTypes.RESET_STATE:
       return initialState;
