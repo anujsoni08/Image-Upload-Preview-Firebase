@@ -9,18 +9,11 @@ const ImageRemovePreview = React.lazy(() =>
 );
 
 const ImageSelector = (props) => {
-  const {
-    src,
-    setImageSource,
-    setSnackbarState,
-    setValidImageStatus,
-    resetState,
-  } = props;
+  const { src, setImageSource } = props;
 
   let imageRef = useRef();
 
-  const resetFile = () => {
-    resetState();
+  const resetFileRef = () => {
     imageRef.current.value = "";
   };
 
@@ -35,19 +28,6 @@ const ImageSelector = (props) => {
     }
   };
 
-  const onImgLoad = ({ target: image }) => {
-    if (image.naturalWidth !== 1024 || image.naturalHeight !== 1024) {
-      setSnackbarState({
-        state: true,
-        message: "Image is not of 1024 * 1024 resolution.",
-        mode: "error",
-      });
-      setValidImageStatus(false);
-    } else {
-      setValidImageStatus(true);
-    }
-  };
-
   const renderImageSelector = () => {
     return (
       <Fragment>
@@ -55,6 +35,7 @@ const ImageSelector = (props) => {
           <label htmlFor="uploadedImage">Select File</label>
           <input
             type="file"
+            accept="image/*"
             id="uploadedImage"
             name="uploadedImage"
             onChange={(event) => onSelectFile(event)}
@@ -66,19 +47,13 @@ const ImageSelector = (props) => {
   };
 
   const renderImageRemovePreview = () => {
-    return (
-      <ImageRemovePreview
-        onImgLoad={onImgLoad}
-        src={src}
-        resetFile={resetFile}
-      />
-    );
+    return <ImageRemovePreview src={src} resetFileRef={resetFileRef} />;
   };
 
   return (
     <div>
       {renderImageSelector()}
-      {src ? renderImageRemovePreview() : null}
+      {renderImageRemovePreview()}
     </div>
   );
 };
@@ -92,11 +67,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setImageSource: (src) => dispatch(actions.setImageSource(src)),
-    setValidImageStatus: (isValid) =>
-      dispatch(actions.setValidImageStatus(isValid)),
-    setSnackbarState: (snackbarObj) =>
-      dispatch(actions.setSnackbarState(snackbarObj)),
-    resetState: () => dispatch(actions.resetState()),
   };
 };
 
@@ -108,7 +78,4 @@ export default connect(
 ImageSelector.propTypes = {
   src: PropTypes.any,
   setImageSource: PropTypes.func,
-  setSnackbarState: PropTypes.func,
-  setValidImageStatus: PropTypes.func,
-  resetState: PropTypes.func,
 };
