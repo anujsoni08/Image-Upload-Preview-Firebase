@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { IMAGE_SIZE_CONST } from "../../../utils/constant";
-import ImageCropper from "../ImageCropper/ImageCropper";
+import ImageCropper from "./ImageCropper/ImageCropper";
 import * as actions from "../../../store/action";
 
 const ImagesCroppedPreviewButton = (props) => {
