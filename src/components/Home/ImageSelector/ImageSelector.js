@@ -1,19 +1,14 @@
-import React, { useState, useRef, Fragment } from "react";
+import React, { useRef, Fragment } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import * as actions from "../../../store/action";
 
 const ImageRemovePreview = React.lazy(() =>
-  import("../ImageRemovePreview/ImageRemovePreview")
+  import("./ImageRemovePreview/ImageRemovePreview")
 );
 
 const ImageSelector = (props) => {
-  const [dimensions, setDimensions] = useState({
-    height: 0,
-    width: 0,
-  });
-
   const {
     src,
     setImageSource,
@@ -40,7 +35,7 @@ const ImageSelector = (props) => {
     }
   };
 
-  const onImgLoad = ({ target :image }) => {
+  const onImgLoad = ({ target: image }) => {
     if (image.naturalWidth !== 1024 || image.naturalHeight !== 1024) {
       setSnackbarState({
         state: true,
@@ -49,10 +44,6 @@ const ImageSelector = (props) => {
       });
       setValidImageStatus(false);
     } else {
-      setDimensions({
-        height: image.naturalHeight,
-        width: image.naturalWidth,
-      });
       setValidImageStatus(true);
     }
   };
